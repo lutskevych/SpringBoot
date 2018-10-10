@@ -77,11 +77,33 @@ public class UserServiceTest {
     }
 
     @Test
-    public void removeUser() {
+    public void shouldRemoveUser() {
+        UUID annaUid = UUID.randomUUID();
+        User anna = new User(annaUid, "anna", "montana",
+                User.Gender.FEMALE, 30, "anna@gmail.com");
+        given(fakeDataDao.selectUserByUserUid(annaUid)).willReturn(Optional.of(anna));
+        given(fakeDataDao.deleteUserByUserUid(annaUid)).willReturn(1);
+
+        int deleteResult = userService.removeUser(annaUid);
+
+        verify(fakeDataDao).selectUserByUserUid(annaUid);
+        verify(fakeDataDao).deleteUserByUserUid(annaUid);
+
+        assertThat(deleteResult).isEqualTo(1);
     }
 
     @Test
     public void insertUser() {
+        UUID annaUid = UUID.randomUUID();
+        User anna = new User(annaUid, "anna", "montana",
+                User.Gender.FEMALE, 30, "anna@gmail.com");
+        given(fakeDataDao.insertUser(anna)).willReturn(1);
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+        int insertResult = userService.insertUser(anna);
+        verify(fakeDataDao).insertUser(captor.capture());
+        User user = captor.getValue();
+        assertUserFields(user);
+        assertThat(insertResult).isEqualTo(1);
     }
 
     private void assertUserFields(User user) {
@@ -91,5 +113,6 @@ public class UserServiceTest {
         assertThat(user.getGender()).isEqualTo(User.Gender.FEMALE);
         assertThat(user.getEmail()).isEqualTo("anna@gmail.com");
         assertThat(user.getUserUid()).isNotNull();
+        assertThat(user.getUserUid()).isInstanceOf(UUID.class);
     }
 }
