@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -27,8 +29,8 @@ public class UserResource {
     @RequestMapping(
             method = RequestMethod.GET
     )
-    public List<User> fetchUsers() {
-        return userService.getAllUsers();
+    public List<User> fetchUsers(@QueryParam("gender") String gender) {
+        return userService.getAllUsers(Optional.ofNullable(gender));
     }
 
     @RequestMapping(
@@ -47,6 +49,28 @@ public class UserResource {
     )
     public ResponseEntity<Integer> insertNewUser(@RequestBody User user) {
         int result = userService.insertUser(user);
+        return getIntegerResponseEntity(result);
+    }
+
+    @RequestMapping(
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Integer> updateUser(@RequestBody User user) {
+        int result = userService.updateUser(user);
+        return getIntegerResponseEntity(result);
+    }
+
+    @RequestMapping(
+            method = RequestMethod.DELETE,
+            path = "{userUid}"
+    )
+    public ResponseEntity<Integer> deleteUser(@PathVariable("userUid") UUID userUid) {
+        int result = userService.removeUser(userUid);
+        return getIntegerResponseEntity(result);
+    }
+
+    private ResponseEntity<Integer> getIntegerResponseEntity(int result) {
         if (result == 1) {
             return ResponseEntity.ok().build();
         }
