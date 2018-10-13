@@ -38,13 +38,13 @@ public class FakeDataDaoTest {
 
     @Test
     public void shouldSelectUserByUserUid() {
-        UUID userId = UUID.randomUUID();
-        User anna = new User(userId, "anna", "montana",
+        UUID annaUid = UUID.randomUUID();
+        User anna = new User(annaUid, "anna", "montana",
                 Gender.FEMALE, 30, "anna@gmail.com");
-        fakeDataDao.insertUser(anna);
+        fakeDataDao.insertUser(annaUid, anna);
         assertThat(fakeDataDao.selectAllUsers()).hasSize(2);
 
-        Optional<User> annaOptional = fakeDataDao.selectUserByUserUid(userId);
+        Optional<User> annaOptional = fakeDataDao.selectUserByUserUid(annaUid);
         assertThat(annaOptional.isPresent()).isTrue();
         assertThat(annaOptional.get()).isEqualToComparingFieldByField(anna);
 
@@ -75,13 +75,13 @@ public class FakeDataDaoTest {
 
     @Test
     public void shouldInsertUser() {
-        UUID userId = UUID.randomUUID();
-        User alex = new User(userId, "alex", "montana",
+        UUID alexUid = UUID.randomUUID();
+        User alex = new User(alexUid, "alex", "montana",
                 Gender.MALE, 35, "alex@gmail.com");
-        fakeDataDao.insertUser(alex);
+        fakeDataDao.insertUser(alexUid, alex);
 
         List<User> users = fakeDataDao.selectAllUsers();
         assertThat(users).hasSize(2);
-        assertThat(fakeDataDao.selectUserByUserUid(userId).get()).isEqualToComparingFieldByField(alex);
+        assertThat(fakeDataDao.selectUserByUserUid(alexUid).get()).isEqualToComparingFieldByField(alex);
     }
 }

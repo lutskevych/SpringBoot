@@ -16,5 +16,5 @@ public interface UserDao {
 
     int deleteUserByUserUid(UUID userUid);
 
-    int insertUser(User user);
+    int insertUser(UUID userId, User user);
 }
