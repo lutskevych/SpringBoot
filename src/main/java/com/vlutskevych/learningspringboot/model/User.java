@@ -1,12 +1,14 @@
 package com.vlutskevych.learningspringboot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
-    private UUID userUid;
+    private final UUID userUid;
     private final String firstName;
     private final String lastName;
     private final Gender gender;
@@ -28,7 +30,7 @@ public class User {
         this.email = email;
     }
 
-    @JsonProperty("id")
+//    @JsonProperty("id") just example. It's a bad practice for renaming fields.
     public UUID getUserUid() {
         return userUid;
     }
