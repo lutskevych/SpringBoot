@@ -15,6 +15,9 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+/*
+The class is not used in the project and presents only as example of Spring MVC usages.
+*/
 
 //@RestController
 //@RequestMapping(
@@ -83,21 +86,5 @@ public class UserResourceSpringMVC {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    class ErrorMessage {
-        String errorMessage;
-
-        public ErrorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
-        }
-
-        public String getErrorMessage() {
-            return errorMessage;
-        }
-
-        public void setErrorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
-        }
     }
 }
