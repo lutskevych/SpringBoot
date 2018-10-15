@@ -37,36 +37,31 @@ public class UserResourceResteasy {
     @GET
     @Produces(APPLICATION_JSON)
     @Path("{userUid}")
-    public Response fetchUser(@PathParam("userUid") UUID userUid) {
-        return userService.getUser(userUid).map(user -> Response.ok(user).build())
-                .orElseGet(() -> Response
-                        .status(Status.NOT_FOUND)
-                        .entity(new ErrorMessage("User " + userUid + " was not found"))
-                        .build());
+    public User fetchUser(@PathParam("userUid") UUID userUid) {
+        return userService
+                .getUser(userUid)
+                .orElseThrow(() -> new NotFoundException("user " + userUid + " not found"));
     }
 
     @POST
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Response insertNewUser(@Valid User user) {
-        int result = userService.insertUser(user);
-        return getIntegerResponseEntity(result);
+    public void insertNewUser(@Valid User user) {
+        userService.insertUser(user);
     }
 
     @PUT
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Response updateUser(User user) {
-        int result = userService.updateUser(user);
-        return getIntegerResponseEntity(result);
+    public void updateUser(User user) {
+        userService.updateUser(user);
     }
 
     @DELETE
     @Produces(APPLICATION_JSON)
     @Path("{userUid}")
-    public Response deleteUser(@PathParam("userUid") UUID userUid) {
-        int result = userService.removeUser(userUid);
-        return getIntegerResponseEntity(result);
+    public void deleteUser(@PathParam("userUid") UUID userUid) {
+        userService.removeUser(userUid);
     }
 
     private Response getIntegerResponseEntity(int result) {
